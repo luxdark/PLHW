@@ -2,18 +2,18 @@
 #include <string>
 #include <vector>
 
-#define STRMAXSIZE 10
+#define STRMAXSIZE 10     // Zdes' mogla byt' vasha reklama
 #define MAXINT 2147483647 // Constant better than (1 << 31) - 1
 
-bool th = false;
+bool th = false; // If problems was detected, th is true
 
-int signd (int a) {
+int signd (int a) {  // Sign of number
     if (th) return 0;
     if (a > 0) return 1;
     else return -1;
 }
 
-int pow (int u, int s) {
+int pow (int u, int s) {  // U^S
     if (th) return 0;
     int res = 1;
     for (int i = 0; i < s; i++) {
@@ -22,21 +22,21 @@ int pow (int u, int s) {
     return res;
 }
 
-int to_int (std :: string t) {
+int to_int (std :: string t) {  // Converting std :: string to int
     if (th) return 0;
     if (t == "0") return 0;
-    int res = 0, sign = 1;
+    int res = 0, sign = 1; // signd() if not allowed for this
     if (t[0] == '-') {
         sign = -1;
         t.erase (0, 1);
     }
 
     if (t.size() > STRMAXSIZE) {
-        std :: cout << "Long numbers";
+        std :: cout << "Long numbers"; // If user sleeped when pressed number
         th = true;
         return 0;
     }
-    if (t.size() == STRMAXSIZE && t >= "2147483647") {
+    if (t.size() == STRMAXSIZE && t >= "2147483647") { // If user wants to test int or long long i used
         std :: cout << "Huge numbers";
         th = true;
         return 0;
@@ -51,7 +51,7 @@ int to_int (std :: string t) {
     return res;
 }
 
-std :: string to_string (int t) {
+std :: string to_string (int t) {  // Rewrited std :: string (of int) 'cause we doesn't use C++11
     if (th) return "0";
     std :: string res;
     int sign = signd (t);
@@ -72,7 +72,7 @@ std :: string to_string (int t) {
     return res;
 }
 
-int make (int a, int b, char c) {
+int make (int a, int b, char c) {  // Function for execute simple operations
     if (th) return 0;
     if (c == '+' || c == '-') {
         if (c == '-') {
@@ -85,7 +85,7 @@ int make (int a, int b, char c) {
         b *= sign; // Make positive numbers
         int u = MAXINT - a;
         if (b > u) {
-            std :: cout << "Huge numbers";
+            std :: cout << "Huge numbers"; // If user haven't calculator
             th = true;
             return 0;
         }
@@ -94,7 +94,7 @@ int make (int a, int b, char c) {
     if (c == '*') {
         long long h = a * b;
         if (h >= MAXINT || -h <= -MAXINT) {
-            std :: cout << "Huge numbers";
+            std :: cout << "Huge numbers"; // If user is a Euler
             th = true;
             return 0;
         }
@@ -104,7 +104,7 @@ int make (int a, int b, char c) {
         if (b != 0)
             return a / b;
         else {
-            std :: cout << "Division by 0";
+            std :: cout << "Division by 0"; // If user is a monkey
             th = true;
             return 0;
         }
@@ -113,16 +113,16 @@ int make (int a, int b, char c) {
         if (b != 0)
             return a % b;
         else {
-            std :: cout << "Division by 0";
+            std :: cout << "Division by 0"; // If user is prescooler
             th = true;
             return 0;
         }
     }
 }
 
-std :: string simple (std :: string t) {
+std :: string simple (std :: string t) {  // Function for convert string of simple operations to int and char
     if (th) return "0";
-    bool k = true;
+    bool k = true; // For correct reading of 0
     std :: string a, b;
     char c;
     for (size_t i = 0; i < t.size(); i++) {
@@ -139,21 +139,21 @@ std :: string simple (std :: string t) {
     return to_string (make (to_int (a), to_int (b), c));
 }
 
-std :: string comp (std :: string t) {
+std :: string comp (std :: string t) { // Making priority for non-brackets expression, and calculate it
     if (t[0] != '-' && (t[0] < '0' || t[0] > '9')) {
-        std :: cout << "Expression can't start with '+', '/', '*', '%' or haven't numbers";
+        std :: cout << "Expression can't start with '+', '/', '*', '%' or haven't numbers"; // If user hates me
         th = true;
         return "0";
     }
     if (t[t.size() - 1] < '0' || t[t.size() - 1] > '9') {
-        std :: cout << "Expression can't end with '+', '-', '/', '*' or '%'";
+        std :: cout << "Expression can't end with '+', '-', '/', '*' or '%'"; // If user wants more
         th = true;
         return "0";
     }
     for (size_t i = 0; i < t.size() - 1; i++) {
         if (t[i] == '+' || t[i] == '-' || t[i] == '*' || t[i] == '/' || t[i] == '%') {
             if (t[i + 1] == '+' || t[i + 1] == '*' || t[i + 1] == '/' || t[i + 1] == '%') {
-                std :: cout << "Not valid operations: " << t[i] << t[i + 1];
+                std :: cout << "Not valid operations: " << t[i] << t[i + 1]; // If user knows c++
                 th = true;
                 return "0";
             }
@@ -161,9 +161,9 @@ std :: string comp (std :: string t) {
     }
     std :: vector <std :: string> nums;
     std :: vector <char> opers;
-    std :: string u;
+    std :: string u; // Buffer
     int y = 0;
-    bool d = true;
+    bool d = true; // For correct reading of 0
     if (t[0] == '-') {
         u.push_back('-');
         y = 1;
@@ -183,8 +183,8 @@ std :: string comp (std :: string t) {
     if (u != "") {
         nums.push_back (u);
     }
-    opers.push_back('+');
-    nums.push_back ("0");
+    opers.push_back('+'); // Nothing to see here
+    nums.push_back ("0"); // And here
     while (nums.size() > 1) {
         for (size_t i = 0; i < opers.size(); i++) {
             if (opers[i] == '*' || opers[i] == '/' || opers[i] == '%') {
@@ -212,11 +212,11 @@ std :: string comp (std :: string t) {
             nums.pop_back();
         }
     }
-    return nums[0];
+    return nums[0]; // It's only one stayed alive
 }
 
-std :: string div (std :: string t) {
-    while (t.find ("(") < t.size() && t.find ("(") >= 0) {
+std :: string div (std :: string t) { // Divide to non-brackets expressions, than execute
+    while (t.find ("(") < t.size() && t.find ("(") >= 0) { // While brackets is alive
         int l = 0;
         std :: string u;
         for (size_t i = 0; i < t.size(); i++) {
@@ -226,8 +226,8 @@ std :: string div (std :: string t) {
                 continue;
             }
             if (t[i] == ')') {
-                t.replace (l, i - l + 1, comp (u));
-                //std :: cout << t << std :: endl;
+                t.replace (l, i - l + 1, comp (u)); // Execute expression and kill brackets
+                //std :: cout << t << std :: endl;   // If you want to see step-by-step
                 break;
             }
             u.push_back (t[i]);
@@ -239,19 +239,19 @@ std :: string div (std :: string t) {
 
 int main () {
     int op = 0;
-    std :: string s, ex = "+-*/:%0123456789()";
+    std :: string s, ex = "+-*/:%0123456789()";  // ex - correct symbols
     while (true) {
         char c;
-        std :: cin.get(c);
-        std :: cout << std :: flush;
+        std :: cin.get(c); // cin can't read '\n', but cin.get() can
+        std :: cout << std :: flush; // for cin.get() working
         if (c == '\n')
             break;
-        if (ex.find (c) >= 0 && ex.find (c) < ex.size())
+        if (ex.find (c) >= 0 && ex.find (c) < ex.size()) // If symbol is correct
             s.push_back(c);
         else {
             if (c == ' ') {}
             else {
-                std :: cout << "Wrong symbol : " << c;
+                std :: cout << "Wrong symbol : " << c; // If meteorite crashed to user's keyboard
                 return 0;
             }
         }
@@ -262,15 +262,15 @@ int main () {
             op--;
         }
         if (op < 0) {
-            std :: cout << "Wrong brackets";
+            std :: cout << "Wrong brackets"; // If user likes right brackets
             return 0;
         }
     }
     if (op != 0) {
-        std :: cout << "Wrong brackets";
+        std :: cout << "Wrong brackets"; // If user hates right brackets
         return 0;
     }
-    std :: string res = div (s);
+    std :: string res = div (s); // Execute s
     if (th) return 0;
     std :: cout << res;
 }
