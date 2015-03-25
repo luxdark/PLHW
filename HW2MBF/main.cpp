@@ -151,7 +151,7 @@ void normal () { // making 2^K * 2^S map
 }
 
 int main () {
-	srand ((unsigned) time (NULL));
+    srand ((unsigned) time (NULL));
     b = new MapBool (1);
     VectorBool* p = new VectorBool (1);
 
@@ -176,28 +176,28 @@ int main () {
         }
     }
     else {
-    	std :: cout << "Enter number of not free cells: ";
-    	int count;
-    	std :: cin >> count;
-    	if (count > n * m) {
-    		std :: cout << "Dirichlet is crying";
-    		return 0;
-		}
-		for (int i = 0; i < count; i++) {
-			int xx = (rand () % n) - n / 2;
-			int yy = (rand () % m) - m / 2;
-			if (b -> get (yy) -> get (xx) == false) {
-				VectorBool *s = new VectorBool (1);
-				s = b -> get (yy);
-				s -> set (xx, true);
-				b -> set (yy, s);
-			}
-			else {
-				i--;
-			}
-		}
-		started = count;
-	}
+        std :: cout << "Enter number of not free cells: ";
+        int count;
+        std :: cin >> count;
+        if (count > n * m) {
+            std :: cout << "Dirichlet is crying";
+            return 0;
+        }
+        for (int i = 0; i < count; i++) {
+            int xx = (rand () % n) - n / 2;
+            int yy = (rand () % m) - m / 2;
+            if (b -> get (yy) -> get (xx) == false) {
+                VectorBool *s = new VectorBool (1);
+                s = b -> get (yy);
+                s -> set (xx, true);
+                b -> set (yy, s);
+            }
+            else {
+                i--;
+            }
+        }
+        started = count;
+    }
     std :: cout << "Set number of days: ";
     std :: cin >> steps;
 
@@ -275,7 +275,7 @@ int main () {
         }
     }
 
-	// Map to console and \map.txt
+    // Map to console and \map.txt
     for (int i = - b -> getsize() + 1; i < b -> getsize(); i++) {
         for (int j = - b -> get (i) -> getsize() + 1; j < b -> get (i) -> getsize(); j++) {
             char c = ' ';
@@ -290,28 +290,28 @@ int main () {
 
     std :: cout << "We have " << abs (life - started) << " " << ((life - started > 0) ? ("more") : ("less")) << " creatures!";
 
-	while (kbhit()) getch();
-	std :: cout << std :: endl << "Type [V] if you want to see map" << std :: endl;
+    while (kbhit()) getch();
+    std :: cout << std :: endl << "Type [V] if you want to see map" << std :: endl;
     char c = getch();
-    if (c == 'V' || c == 'v' || c == 'ì' || c == 'Ì') {
-		int vx = 0; // View X
-		int vy = 0; // View Yu{O,jgkgbk.oy.
-		system ("cls");
-		for (char f = 'B'; f != '0'; f = getch ()) {
-			if (f == 'w' || f == 'W' || f == 'ö' || f == 'Ö') vx++; // Inverted
-			if (f == 'a' || f == 'A' || f == 'ô' || f == 'Ô') vy++;
-			if (f == 's' || f == 'S' || f == 'û' || f == 'Û') vx--;
-			if (f == 'd' || f == 'D' || f == 'â' || f == 'Â') vy--;
-			system ("cls");
-			for (int i = vx - 3; i < vx + 3; i++) {
-				for (int j = vy - 3; j < vy + 3; j++) {
-					std :: cout << '[' << ((b -> get (i) -> get (j)) ? ('X') : (' ')) << ']';
-				}
-				std :: cout << std :: endl;
-			}
-			std :: cout << "WASD to move map, 0 to exit";
-		}
-	}
+    if (c == 'V' || c == 'v' || c == 'ï¿½' || c == 'ï¿½') {
+        int vx = 0; // View X
+        int vy = 0; // View Yu{O,jgkgbk.oy.
+        system ("cls");
+        for (char f = 'B'; f != '0'; f = getch ()) {
+            if (f == 'w' || f == 'W' || f == 'ï¿½' || f == 'ï¿½') vx++; // Inverted
+            if (f == 'a' || f == 'A' || f == 'ï¿½' || f == 'ï¿½') vy++;
+            if (f == 's' || f == 'S' || f == 'ï¿½' || f == 'ï¿½') vx--;
+            if (f == 'd' || f == 'D' || f == 'ï¿½' || f == 'ï¿½') vy--;
+            system ("cls");
+            for (int i = vx - 3; i < vx + 3; i++) {
+                for (int j = vy - 3; j < vy + 3; j++) {
+                    std :: cout << '[' << ((b -> get (i) -> get (j)) ? ('X') : (' ')) << ']';
+                }
+                std :: cout << std :: endl;
+            }
+            std :: cout << "WASD to move map, 0 to exit";
+        }
+    }
 
 }
 
