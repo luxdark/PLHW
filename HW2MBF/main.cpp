@@ -291,11 +291,11 @@ int main () {
     std :: cout << "We have " << abs (life - started) << " " << ((life - started > 0) ? ("more") : ("less")) << " creatures!";
 
     while (kbhit()) getch();
-    std :: cout << std :: endl << "Type [V] if you want to see map" << std :: endl;
+    std :: cout << std :: endl << "Type [1] if you want to see map" << std :: endl;
     char c = getch();
-    if (c == 'V' || c == 'v' || c == '�' || c == '�') {
+    if (c == '1') {
         int vx = 0; // View X
-        int vy = 0; // View Yu{O,jgkgbk.oy.
+        int vy = 0; // View Y
         system ("cls");
         for (char f = 'B'; f != '0'; f = getch ()) {
             if (f == 'w' || f == 'W' || f == '�' || f == '�') vx++; // Inverted
@@ -309,7 +309,7 @@ int main () {
                 }
                 std :: cout << std :: endl;
             }
-            std :: cout << "WASD to move map, 0 to exit";
+            std :: cout << "WASD to move map, 0 to exit. Remember to use latin chars.";
         }
     }
 
