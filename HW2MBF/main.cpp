@@ -1,7 +1,6 @@
 #include <fstream>
 #include <iostream>
 
-#include <conio.h>
 #include <math.h>
 #include <time.h>
 #include <stdlib.h>
@@ -290,18 +289,18 @@ int main () {
 
     std :: cout << "We have " << abs (life - started) << " " << ((life - started > 0) ? ("more") : ("less")) << " creatures!";
 
-    while (kbhit()) getch();
     std :: cout << std :: endl << "Type [1] if you want to see map" << std :: endl;
-    char c = getch();
+    char c = fin.get();
+    fin << flush;
     if (c == '1') {
         int vx = 0; // View X
         int vy = 0; // View Y
         system ("cls");
-        for (char f = 'B'; f != '0'; f = getch ()) {
-            if (f == 'w' || f == 'W' || f == '�' || f == '�') vx++; // Inverted
-            if (f == 'a' || f == 'A' || f == '�' || f == '�') vy++;
-            if (f == 's' || f == 'S' || f == '�' || f == '�') vx--;
-            if (f == 'd' || f == 'D' || f == '�' || f == '�') vy--;
+        for (char f = 'B'; f != '0'; f = fin.get ()) {
+            if (f == 'w' || f == 'W') vx++; // Inverted
+            if (f == 'a' || f == 'A') vy++;
+            if (f == 's' || f == 'S') vx--;
+            if (f == 'd' || f == 'D') vy--;
             system ("cls");
             for (int i = vx - 3; i < vx + 3; i++) {
                 for (int j = vy - 3; j < vy + 3; j++) {
