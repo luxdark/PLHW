@@ -42,12 +42,13 @@ void settings :: set(std::string const & name, std::string const & value) {
     fout << "postset " << "endfile" << " postset " << "file" << std :: endl;
 }
 
-std :: string const & settings :: get(std::string const & name, std::string const & def) const {
+std :: string const & settings :: get(std::string const & name, std::string const & def, std :: string res) const {
     std :: map <std :: string, param> buff = params;
+    res = def;
     if (!buff[name].is_empty()) {
-        return std :: to_string ((double) (buff[name]));
+        res = (std :: string) buff [name];
     }
-    return def;
+    return res;
 }
 
 settings :: settings(std::string const & filename) {
@@ -96,6 +97,12 @@ settings :: param :: operator bool() const {
 
 settings :: param & settings :: param :: operator=(std::string const & s) {
     rval = "";
+    for (char c : s) {
+        if ((c < '0' || c > '9') && c != '-' && c != '.' && c != '+') {
+            rval = "str";
+            break;
+        }
+    }
     std :: string v, t;
     unsigned int i;
     for (i = 0; i < s.size() && s[i] != '.'; i++) {
@@ -116,6 +123,9 @@ settings :: param & settings :: param :: operator=(std::string const & s) {
 }
 
 settings :: param & settings :: param :: operator=(int i) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     val = std :: to_string (i);
     tval = "";
@@ -123,6 +133,9 @@ settings :: param & settings :: param :: operator=(int i) {
 }
 
 settings :: param & settings :: param :: operator=(bool b) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     val = ((b) ? "1" : "0");
     tval = "";
@@ -130,6 +143,9 @@ settings :: param & settings :: param :: operator=(bool b) {
 }
 
 settings :: param & settings :: param :: operator=(double d) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     val = std :: to_string (d);
     unsigned int i, j;
@@ -147,19 +163,34 @@ settings :: param & settings :: param :: operator=(double d) {
     return *this;
 }
 
+settings :: param & settings :: param :: operator+=(std :: string const & s) {
+    rval = "str";
+    val = val + ((tval.size() > 0) ? ('.' + tval) : ("")) + s;
+    return *this;
+}
+
 settings :: param & settings :: param :: operator+=(int i) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     val = std :: to_string (std :: stoi (val) + i);
     return *this;
 }
 
 settings :: param & settings :: param :: operator-=(int i) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     val = std :: to_string (std :: stoi (val) - i);
     return *this;
 }
 
 settings :: param & settings :: param :: operator*=(int i) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     settings :: param k = *this;
     double u = k;
@@ -170,6 +201,9 @@ settings :: param & settings :: param :: operator*=(int i) {
 }
 
 settings :: param & settings :: param :: operator/=(int i) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     settings :: param k = *this;
     double u = k;
@@ -180,6 +214,9 @@ settings :: param & settings :: param :: operator/=(int i) {
 }
 
 settings :: param & settings :: param :: operator+=(double d) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     settings :: param k = *this;
     double u = k;
@@ -190,6 +227,9 @@ settings :: param & settings :: param :: operator+=(double d) {
 }
 
 settings :: param & settings :: param :: operator-=(double d) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     settings :: param k = *this;
     double u = k;
@@ -200,6 +240,9 @@ settings :: param & settings :: param :: operator-=(double d) {
 }
 
 settings :: param & settings :: param :: operator*=(double d) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     settings :: param k = *this;
     double u = k;
@@ -210,6 +253,9 @@ settings :: param & settings :: param :: operator*=(double d) {
 }
 
 settings :: param & settings :: param :: operator/=(double d) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     settings :: param k = *this;
     double u = k;
@@ -220,6 +266,9 @@ settings :: param & settings :: param :: operator/=(double d) {
 }
 
 settings :: param & settings :: param :: operator|=(bool b) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     bool q = *this;
     tval = "";
@@ -228,6 +277,9 @@ settings :: param & settings :: param :: operator|=(bool b) {
 }
 
 settings :: param & settings :: param :: operator&=(bool b) {
+    if (rval == "str") {
+        return *this;
+    }
     rval = "";
     bool q = *this;
     tval = "";

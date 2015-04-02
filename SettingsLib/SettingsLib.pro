@@ -1,15 +1,15 @@
-TEMPLATE = app
-CONFIG += console
-CONFIG -= app_bundle
-CONFIG -= qt
+TEMPLATE = lib
+CONFIG += shared
+
+DEFINES += D_SHARED_LIB
+SOURCES = settings.cpp
+HEADERS = settings.h
+
+TARGET = settings
+DLLDESTDIR = C:\workspace\bin
+DESTDIR = C:\workspace\lib
 
 QMAKE_CXXFLAGS += -std=c++11
-
-SOURCES += main.cpp \
-    settings.cpp
-
-HEADERS += \
-    settings.h
 
 OTHER_FILES += \
     sett.stg

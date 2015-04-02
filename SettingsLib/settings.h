@@ -12,7 +12,7 @@
 class settings {
     public:
         class param {
-            private:
+            public:
                 std :: string val = "0", tval = "", rval = "empty";
                 //param(param const &);
 
@@ -66,7 +66,7 @@ class settings {
          * \return Stored value for given name or default value
          */
         std::string const & get(std::string const & name,
-            std::string const & def = "0") const;
+                                std::string const & def = "0", std :: string res = "") const;
         /**
          * Set or replace setting value and save changes to file
          * \param name Setting unique identifier
