@@ -12,6 +12,7 @@ void settings :: reload() {
     std :: ifstream fin (file);
     int count = 0;
     using std :: string;
+    params.clear();
     string s[4];
     fin >> s[0] >> s[1] >> s[2] >> s[3];
     if (s[0] == s[2] && s[2] == "preset") {
@@ -27,7 +28,9 @@ void settings :: reload() {
     if (s[0] == "postset" && s[2] == s[0] && s[1] == "endfile") {
         return;
     }
-    std :: cout << "Wrong file format";
+    fin.close();
+    std :: ofstream fout (file);
+    fout << "preset 0 preset file\npostset endfile postset file";
 }
 
 void settings :: set(std::string const & name, std::string const & value) {
@@ -71,10 +74,13 @@ settings :: settings(std::string const & filename) {
     if (s[0] == "postset" && s[2] == s[0] && s[1] == "endfile") {
         return;
     }
-    std :: cout << "Wrong file format";
+    fin.close();
+    std :: ofstream fout (filename);
+    fout << "preset 0 preset file\npostset endfile postset file";
 }
 
 settings :: param :: operator std :: string () const {
+    if (rval == "empty") return "";
     return val + ((tval.size () != 0) ? ("." + tval) : (""));
 }
 
@@ -290,4 +296,3 @@ settings :: param & settings :: param :: operator&=(bool b) {
 bool settings :: param :: is_empty() const {
     return ((rval != "empty") ? false : true);
 }
-

@@ -12,7 +12,7 @@
 class settings {
     public:
         class param {
-            public:
+            private:
                 std :: string val = "0", tval = "", rval = "empty";
                 //param(param const &);
 
