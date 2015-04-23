@@ -66,7 +66,7 @@ class settings {
          * \return Stored value for given name or default value
          */
         std::string const & get(std::string const & name,
-                                std::string const & def = "0", std :: string res = "") const;
+                                std::string const & def = "", std :: string res = "") const;
         /**
          * Set or replace setting value and save changes to file
          * \param name Setting unique identifier
