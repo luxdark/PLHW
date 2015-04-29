@@ -1,5 +1,12 @@
 #include "settings.h"
 
+
+void settings :: refresh(std :: string & name, std :: string newval) {
+    if (ready && params[name].rewrite)
+        set(name, newval);
+    return;
+}
+
 void settings :: reset() {
     std :: ofstream fout (file);
     fout << "preset " << 0 << " preset " << "file" << std :: endl;
@@ -7,8 +14,6 @@ void settings :: reset() {
     std :: map <std :: string, param> u;
     params = u;
 }
-
-#include <chrono>
 
 void settings :: reload() {
     std :: ifstream fin (file);
@@ -22,8 +27,10 @@ void settings :: reload() {
     }
     for (int i = 0; i < count; i++) {
         settings :: param k;
+        k.root = this;
         fin >> s[0] >> s[1] >> s[2] >> s[3];
         k = s[2];
+        k.name = s[1];
         params[s[1]] = k;
     }
     fin >> s[0] >> s[1] >> s[2] >> s[3];
@@ -36,8 +43,12 @@ void settings :: reload() {
 }
 
 void settings :: set(std::string const & name, std::string const & value) {
-    if (value.size() > 0)
-        params[name] = value;
+    if (value.size() > 0) {
+        params[name].rewrite = false;
+        params[name].justSetThisFolkingValue(value);
+        params[name].name = name;
+        params[name].root = this;
+    }
     int count = params.size();
     std :: ofstream fout (file);
     fout << "preset " << count << " preset " << "file" << std :: endl;
@@ -57,6 +68,7 @@ std :: string const & settings :: get(std::string const & name, std::string cons
 }
 
 settings :: settings(std::string const & filename) {
+
     file = filename;
     std :: ifstream fin (filename);
     int count = 0;
@@ -68,17 +80,21 @@ settings :: settings(std::string const & filename) {
     }
     for (int i = 0; i < count; i++) {
         settings :: param k;
+        k.root = this;
         fin >> s[0] >> s[1] >> s[2] >> s[3];
         k = s[2];
+        k.name = s[1];
         params[s[1]] = k;
     }
     fin >> s[0] >> s[1] >> s[2] >> s[3];
     if (s[0] == "postset" && s[2] == s[0] && s[1] == "endfile") {
+        ready = true;
         return;
     }
     fin.close();
     std :: ofstream fout (filename);
     fout << "preset 0 preset file\npostset endfile postset file";
+
 }
 
 settings :: param :: operator std :: string () const {
@@ -101,6 +117,34 @@ settings :: param :: operator bool() const {
         return false;
     }
     return true;
+}
+
+settings :: param & settings :: param :: justSetThisFolkingValue(std::string const & s) {
+    rval = "";
+    for (char c : s) {
+        if ((c < '0' || c > '9') && c != '-' && c != '.' && c != '+') {
+            rval = "str";
+            break;
+        }
+    }
+    std :: string v, t;
+    unsigned int i;
+    for (i = 0; i < s.size() && s[i] != '.'; i++) {
+        v.push_back (s[i]);
+    }
+    for (i++; i < s.size(); i++) {
+        t.push_back (s[i]);
+    }
+    val = v;
+    tval = t;
+    if (s == "true") {
+        val = "1";
+    }
+    if (s == "false") {
+        val = "0";
+    }
+    //root -> refresh (name, val + tval);
+    return *this;
 }
 
 settings :: param & settings :: param :: operator=(std::string const & s) {
@@ -127,6 +171,8 @@ settings :: param & settings :: param :: operator=(std::string const & s) {
     if (s == "false") {
         val = "0";
     }
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -137,6 +183,8 @@ settings :: param & settings :: param :: operator=(int i) {
     rval = "";
     val = std :: to_string (i);
     tval = "";
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -147,6 +195,8 @@ settings :: param & settings :: param :: operator=(bool b) {
     rval = "";
     val = ((b) ? "1" : "0");
     tval = "";
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -168,12 +218,16 @@ settings :: param & settings :: param :: operator=(double d) {
         tval.push_back (val[i]);
     }
     val.resize(j);
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
 settings :: param & settings :: param :: operator+=(std :: string const & s) {
     rval = "str";
     val = val + ((tval.size() > 0) ? ('.' + tval) : ("")) + s;
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -183,6 +237,8 @@ settings :: param & settings :: param :: operator+=(int i) {
     }
     rval = "";
     val = std :: to_string (std :: stoi (val) + i);
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -192,6 +248,8 @@ settings :: param & settings :: param :: operator-=(int i) {
     }
     rval = "";
     val = std :: to_string (std :: stoi (val) - i);
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -205,6 +263,8 @@ settings :: param & settings :: param :: operator*=(int i) {
     k = u * i;
     val = k.val;
     tval = k.tval;
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -218,6 +278,8 @@ settings :: param & settings :: param :: operator/=(int i) {
     k = u / i;
     val = k.val;
     tval = k.tval;
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -231,6 +293,8 @@ settings :: param & settings :: param :: operator+=(double d) {
     k = u + d;
     val = k.val;
     tval = k.tval;
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -244,6 +308,8 @@ settings :: param & settings :: param :: operator-=(double d) {
     k = u - d;
     val = k.val;
     tval = k.tval;
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -257,6 +323,8 @@ settings :: param & settings :: param :: operator*=(double d) {
     k = u * d;
     val = k.val;
     tval = k.tval;
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -270,6 +338,8 @@ settings :: param & settings :: param :: operator/=(double d) {
     k = u / d;
     val = k.val;
     tval = k.tval;
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -281,6 +351,8 @@ settings :: param & settings :: param :: operator|=(bool b) {
     bool q = *this;
     tval = "";
     val = (q | b ? "1" : "0");
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
@@ -292,9 +364,26 @@ settings :: param & settings :: param :: operator&=(bool b) {
     bool q = *this;
     tval = "";
     val = (q & b ? "1" : "0");
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + tval);
     return *this;
 }
 
 bool settings :: param :: is_empty() const {
     return ((rval != "empty") ? false : true);
+}
+
+const settings::param settings::operator[](const std::string &name) const {
+    std :: map <std :: string, param> buff = params;
+    return buff[name];
+}
+
+settings::param settings::operator[](const std::string &name) {
+    if ((std :: string)params[name] != "")
+        return params[name];
+    param k;
+    k.root = this;
+    k.name = name;
+    params[name] = k;
+    return k;
 }

@@ -17,11 +17,16 @@ class settings {
                 //param(param const &);
 
             public:
+                settings *root;
+                std :: string name;
+                bool rewrite = false;
+
                 operator std::string() const;
                 operator int() const;
                 operator bool() const;
                 operator double() const;
 
+                param & justSetThisFolkingValue(std::string const & s);
                 param & operator=(std::string const &s);
                 param & operator=(int);
                 param & operator=(bool);
@@ -50,6 +55,8 @@ class settings {
         std :: map <std :: string, param> params;
 
     public:
+        bool ready = false;
+
         // Main functions
 
         /**
@@ -57,6 +64,8 @@ class settings {
          * and load data from file (if exists)
          * \param filename Path to file with settings
          */
+
+        void refresh(std :: string & name, std :: string newval);
 
         settings(std::string const & filename);
         /**
@@ -83,7 +92,7 @@ class settings {
          */
         void reload();
 
-        // Advanced funñtions
+        // Advanced fun?tions
 
         /**
           * Get constant setting wrapper
@@ -96,6 +105,5 @@ class settings {
           */
         param operator[](std::string const & name);
 };
-
 
 #endif // SETTINGS_H

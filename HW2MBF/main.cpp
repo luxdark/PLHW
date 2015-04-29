@@ -8,7 +8,7 @@
 #define fin std :: cin
 #define fout std :: cout
 
-std :: ofstream fout ("map.txt");
+//std :: ofstream fout ("map.txt");
 long long resetsize = 1, steps = 0; // resetsize - current size of VectorBool needed
 long long died = 0, born = 0, started = 0; // died & born on current 10 steps
 double pb = 0.0; // sum { tborn / tdied }
@@ -293,19 +293,20 @@ int main () {
     std :: cout << "We have " << abs (life - started) << " " << ((life - started > 0) ? ("more") : ("less")) << " creatures!";
 
     std :: cout << std :: endl << "Type [1] if you want to see map" << std :: endl;
-    char c = cin.get();
-    fin << flush;
+    fout << std :: flush;
+    char c = std :: cin.get();
+    fout << std :: flush;
     if (c == '1') {
         int vx = 0; // View X
         int vy = 0; // View Y
-        cout << endl << endl;
+        std :: cout << std :: endl << std :: endl;
         for (char f = 'B'; f != '0'; f = fin.get ()) {
             if (f == 'w' || f == 'W') vx++; // Inverted
             if (f == 'a' || f == 'A') vy++;
             if (f == 's' || f == 'S') vx--;
             if (f == 'd' || f == 'D') vy--;
-            cout << endl << endl;
-            fin << flush;
+            std :: cout << std :: endl << std :: endl;
+            fout << std :: flush;
             for (int i = vx - 3; i < vx + 3; i++) {
                 for (int j = vy - 3; j < vy + 3; j++) {
                     std :: cout << '[' << ((b -> get (i) -> get (j)) ? ('X') : (' ')) << ']';
