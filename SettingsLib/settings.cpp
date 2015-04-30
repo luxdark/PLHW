@@ -1,7 +1,6 @@
 #include "settings.h"
 
 
-
 void settings :: refresh(std :: string & name, std :: string newval) {
     if (ready && params[name].rewrite)
         set(name, newval);
@@ -172,6 +171,30 @@ settings :: param & settings :: param :: operator=(std::string const & s) {
     if (s == "false") {
         val = "0";
     }
+    root -> params [name].rewrite = true;
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
+    return *this;
+}
+
+settings :: param & settings :: param :: operator=(const char* u) {
+    std :: string s = u;
+    rval = "";
+    for (char c : s) {
+        if ((c < '0' || c > '9') && c != '-' && c != '.' && c != '+') {
+            rval = "str";
+            break;
+        }
+    }
+    std :: string v, t;
+    unsigned int i;
+    for (i = 0; i < s.size() && s[i] != '.'; i++) {
+        v.push_back (s[i]);
+    }
+    for (i++; i < s.size(); i++) {
+        t.push_back (s[i]);
+    }
+    val = v;
+    tval = t;
     root -> params [name].rewrite = true;
     root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
@@ -380,8 +403,9 @@ const settings::param settings::operator[](const std::string &name) const {
 }
 
 settings::param settings::operator[](const std::string &name) {
-    if ((std :: string)params[name] != "")
+    if ((std :: string)params[name] != "") {
         return params[name];
+    }
     param k;
     k.root = this;
     k.name = name;

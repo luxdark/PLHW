@@ -31,6 +31,7 @@ class settings {
                 param & operator=(int);
                 param & operator=(bool);
                 param & operator=(double);
+                param & operator=(const char*);
 
                 param & operator+=(std::string const &);
                 param & operator+=(int);
@@ -105,5 +106,6 @@ class settings {
           */
         param operator[](std::string const & name);
 };
+
 
 #endif // SETTINGS_H
