@@ -1,6 +1,7 @@
 #include "settings.h"
 
 
+
 void settings :: refresh(std :: string & name, std :: string newval) {
     if (ready && params[name].rewrite)
         set(name, newval);
@@ -143,7 +144,7 @@ settings :: param & settings :: param :: justSetThisFolkingValue(std::string con
     if (s == "false") {
         val = "0";
     }
-    //root -> refresh (name, val + tval);
+    //root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -172,7 +173,7 @@ settings :: param & settings :: param :: operator=(std::string const & s) {
         val = "0";
     }
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -184,7 +185,7 @@ settings :: param & settings :: param :: operator=(int i) {
     val = std :: to_string (i);
     tval = "";
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -196,7 +197,7 @@ settings :: param & settings :: param :: operator=(bool b) {
     val = ((b) ? "1" : "0");
     tval = "";
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -219,7 +220,7 @@ settings :: param & settings :: param :: operator=(double d) {
     }
     val.resize(j);
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -227,7 +228,7 @@ settings :: param & settings :: param :: operator+=(std :: string const & s) {
     rval = "str";
     val = val + ((tval.size() > 0) ? ('.' + tval) : ("")) + s;
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -238,7 +239,7 @@ settings :: param & settings :: param :: operator+=(int i) {
     rval = "";
     val = std :: to_string (std :: stoi (val) + i);
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -249,7 +250,7 @@ settings :: param & settings :: param :: operator-=(int i) {
     rval = "";
     val = std :: to_string (std :: stoi (val) - i);
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -264,7 +265,7 @@ settings :: param & settings :: param :: operator*=(int i) {
     val = k.val;
     tval = k.tval;
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -279,7 +280,7 @@ settings :: param & settings :: param :: operator/=(int i) {
     val = k.val;
     tval = k.tval;
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -294,7 +295,7 @@ settings :: param & settings :: param :: operator+=(double d) {
     val = k.val;
     tval = k.tval;
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -309,7 +310,7 @@ settings :: param & settings :: param :: operator-=(double d) {
     val = k.val;
     tval = k.tval;
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -324,7 +325,7 @@ settings :: param & settings :: param :: operator*=(double d) {
     val = k.val;
     tval = k.tval;
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -339,7 +340,7 @@ settings :: param & settings :: param :: operator/=(double d) {
     val = k.val;
     tval = k.tval;
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -352,7 +353,7 @@ settings :: param & settings :: param :: operator|=(bool b) {
     tval = "";
     val = (q | b ? "1" : "0");
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
@@ -365,7 +366,7 @@ settings :: param & settings :: param :: operator&=(bool b) {
     tval = "";
     val = (q & b ? "1" : "0");
     root -> params [name].rewrite = true;
-    root -> refresh (name, val + tval);
+    root -> refresh (name, val + ((tval.size() > 0) ? "." + tval : ""));
     return *this;
 }
 
